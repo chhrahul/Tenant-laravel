@@ -65,32 +65,68 @@
         text-align: center;
         margin-top: 15px;
     }
+
+    /* Make the value inside the input uppercase */
+    .uppercase-input {
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+
+    /* If you want a placeholder-like effect (when no date is selected), you can use the following trick */
+    .uppercase-input::-webkit-input-placeholder {
+        text-transform: uppercase;
+    }
 </style>
 
 <form method="POST" action="{{ route('data.entry') }}" class="data-entry-form">
-    @if (session('success'))
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                title: @json(session('success')),
+                icon: 'success',
+                confirmButtonColor: '#6259ca',
+                confirmButtonText: 'Ok'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Reload the page after confirmation
+                    location.reload();
+                }
+            });
+        </script>
+    @endif
+
+    <!-- @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show">
             {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    @endif
+    @endif -->
 
     @if (session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <div class="error">{{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        <script>
+            Swal.fire({
+                title: '{{ session('error') }}',
+                icon: 'error',
+                confirmButtonColor: '#e74c3c',
+                confirmButtonText: 'Ok'
+            });
+        </script>
     @endif
 
     @if ($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show">
-            <ul>
-                @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        <script>
+            // Collect all error messages into an array
+            const errorMessages = @json($errors->all());
+
+            // Trigger SweetAlert2 with error messages
+            Swal.fire({
+                title: 'Validation Errors',
+                icon: 'error',
+                html: '<ul>' + errorMessages.map(error => '<li>' + error + '</li>').join('') + '</ul>',
+                confirmButtonColor: '#e74c3c', // Red button for errors
+                confirmButtonText: 'Ok'
+            });
+        </script>
     @endif
     @csrf
     <h2>Data Entry Form</h2>
@@ -122,28 +158,39 @@
 
     <div class="form-group">
         <label for="rent">In-Place Rent (NNN)</label>
-        <input type="text" name="rent" id="rent" class="form-input" >
+        <input type="text" name="rent" id="rent" min="1" class="form-input" >
     </div>
 
     <div class="form-group">
         <label for="square_feet">Square Feet (SF)</label>
-        <input type="number" name="square_feet" id="square_feet" class="form-input" >
+        <input type="number" name="square_feet" id="square_feet" class="form-input" min="1" step="1" required>
     </div>
 
+
     <div class="form-group">
-        <label for="percentage_of_total">Percentage of Total</label>
+        <label for="percentage_of_total">% of Total </label>
         <input type="number" name="percentage_of_total" id="percentage_of_total" class="form-input" step="0.01" >
     </div>
 
     <div class="form-group">
-        <label for="lease_expiration">Lease Expiration</label>
-        <input type="date" name="lease_expiration" id="lease_expiration" class="form-input" >
+        <label for="lease_expiration" class="uppercase-label">Lease Expiration</label>
+        <input type="date" name="lease_expiration" id="lease_expiration" class="form-input uppercase-input">
     </div>
 
     <button type="submit" class="submit-btn">Submit</button>
 </form>
 <script>
     $(document).ready(function() {
+
+        $('#lease_expiration').click(function() {
+            // Trigger the click event on the input field
+            $(this)[0].showPicker();
+        });
+
+        const today = new Date().toISOString().split('T')[0];
+        // Set the 'min' attribute of the lease_expiration input field to today's date
+        $('#lease_expiration').attr('min', today);
+
         if ($('.alert-success').length) {
             setTimeout(function() {
                 $('.alert-success').fadeOut();
@@ -173,7 +220,7 @@
                 $field.next('.error').remove();
                 if (fieldValue === '') {
                     isValid = false;
-                    $field.after(`<div class="error" style="color:red; margin-top:5px">${fieldName.replace("_", " ")} is required.</div>`);
+                    $field.after(`<div class="error" style="color:red; margin-top:5px">${fieldName.replace(/_/g, ' ').replace(/^./, str => str.toUpperCase())} is required.</div>`);
                 }
             });
             if (!isValid) {

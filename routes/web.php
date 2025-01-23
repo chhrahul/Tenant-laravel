@@ -18,9 +18,10 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('home', function () {
-    return view('welcome');
-});
+// Route::get('home', function () {
+//     return view('welcome');
+// });
+Route::get('/', [LoginController::class, 'showLoginForm'])->name('login.form');
 
 Route::prefix('auth')->group(function () {
     Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register.user');
@@ -41,7 +42,7 @@ Route::middleware(['auth', 'checkRole:admin'])->group(function () {
 
 Route::post('/logout', function () {
     Auth::logout();
-    return redirect('auth/login');
+    return redirect('/');
 })->name('logout');
 
 

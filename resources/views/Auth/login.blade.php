@@ -97,10 +97,6 @@
     </div>
 
     <button type="submit" class="submit-btn">Login</button>
-
-    <div class="form-footer">
-        <p>Don't have an account? <a href="{{ route('register.user') }}">Register here</a></p>
-    </div>
 </form>
 <script>
     $(document).ready(function() {
@@ -117,7 +113,7 @@
                 $field.next('.error').remove();
                 if (fieldValue === '') {
                     isValid = false;
-                    $field.after(`<div class="error" style="color:red; margin-top:5px">${fieldName.replace("_", " ")} is required.</div>`);
+                    $field.after(`<div class="error" style="color:red; margin-top:5px">${fieldName.replace("_", " ").replace(/^./, str => str.toUpperCase())} is required.</div>`);
                 }
 
                 if (fieldName === 'email' && fieldValue !== '') {

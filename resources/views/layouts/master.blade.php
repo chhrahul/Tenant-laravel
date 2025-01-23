@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -89,7 +91,7 @@
 
         .nav_sec {
             display: flex;
-            justify-content: space-between;
+            justify-content: end;
             align-items: center;
         }
 
@@ -117,22 +119,20 @@
 </head>
 
 <body>
+    @auth
     <header>
         <nav>
             <ul class="nav_sec">
-                <li><a href="{{ url('/home') }}">Home</a></li>
+                <!-- <li><a href="{{ url('/home') }}">Home</a></li> -->
                 <div>
-                    @guest
-                    <li><a href="{{ url('auth/register') }}">Registration</a></li>
-                    <li><a href="{{ url('auth/login') }}">Login</a></li>
-                    @else
-                        @if (auth()->user()->role === 'user')
-                        <li><a href="{{ url('/data-entry') }}">Data Entry</a></li>
-                        @elseif (auth()->user()->role === 'admin')
-                        <li><a href="{{ url('/report') }}">Report</a></li>
-                        @endif
+                    <!-- <li><a href="{{ url('auth/register') }}">Registration</a></li> -->
+                    <!-- <li><a href="{{ url('auth/login') }}">Login</a></li> -->
+                    @if (auth()->user()->role === 'user')
+                    <li><a href="{{ url('/data-entry') }}">Data Entry</a></li>
+                    @elseif (auth()->user()->role === 'admin')
+                    <li><a href="{{ url('/report') }}">Report</a></li>
+                    @endif
                 </div>
-
                 <div>
                     <li>
                         <a href="{{ route('logout') }}"
@@ -144,12 +144,14 @@
                         @csrf
                     </form>
                 </div>
-                @endguest
             </ul>
         </nav>
     </header>
+    @endauth
+
     <main>
         @yield('content')
     </main>
 </body>
+
 </html>

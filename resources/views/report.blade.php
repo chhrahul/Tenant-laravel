@@ -75,6 +75,14 @@ $(document).ready(function() {
                 }
             }
         ],
+        columnDefs: [
+            {
+                targets: '_all', // Apply to all columns
+                createdCell: function (td) {
+                    $(td).css('padding-left', '20px'); // Add 5px padding to all columns
+                }
+            }
+        ],
         footerCallback: function(row, data, start, end, display) {
             let api = this.api();
 
