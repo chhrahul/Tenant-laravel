@@ -25,8 +25,8 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login.form');
 
 Route::prefix('auth')->group(function () {
-    // Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register.user');
-    // Route::post('register', [RegisterController::class, 'register'])->name('register.newuser');
+    Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register.user');
+    Route::post('register', [RegisterController::class, 'register'])->name('register.newuser');
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login.form');
     Route::post('login', [LoginController::class, 'login'])->name('login');
 });
