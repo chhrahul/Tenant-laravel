@@ -41,7 +41,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="edit-user" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="edit-user-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -49,11 +49,29 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-
+        <form id="edit-user-form">
+          <div class="mb-3">
+            <label for="edit-name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="edit-name" placeholder="Enter user name" />
+          </div>
+          <div class="mb-3">
+            <label for="edit-role" class="form-label">Role</label>
+            <select class="form-select" id="edit-role">
+              <option value="" disabled selected>Select a role</option>
+              <option value="Admin">Admin</option>
+              <option value="Editor">Editor</option>
+              <option value="Viewer">Viewer</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="edit-password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="edit-password" placeholder="Enter new password" />
+          </div>
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-primary" id="save-changes-btn">Save changes</button>
       </div>
     </div>
   </div>
@@ -88,7 +106,7 @@ $(document).ready(function() {
                 orderable: false,
                 searchable: false,
                 render: function(data, type, row) {
-                    return `<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit-user" data-id="${row.id}">Edit</button>`;
+                    return `<button class="btn btn-primary btn-edit" data-bs-toggle="modal" data-bs-target="#edit-user-modal" data-id="${row.id}">Edit</button>`;
                 }
             },
             {
@@ -109,6 +127,29 @@ $(document).ready(function() {
             }
         ]
     });
+
+    $(document).on('click', '.btn-edit', function() {
+        const userId = $(this).data('id');
+        console.log(userId);
+        $.ajax({
+            url: "{{route('get.data.activity.note')}}",
+            method: 'POST',
+            success: function(user) {
+                // Populate modal fields with user data
+                $('#edit-name').val(user.name);
+                $('#edit-role').val(user.role);
+                $('#edit-password').val(''); // Leave password empty for security
+
+                // Open the modal (Bootstrap handles this automatically with data attributes)
+                $('#edit-user-modal').modal('show');
+            },
+            error: function() {
+                alert('Failed to fetch user data. Please try again.');
+            }
+        });
+    })
+
+
 });
 </script>
 
