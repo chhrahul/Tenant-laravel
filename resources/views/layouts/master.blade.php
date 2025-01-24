@@ -130,6 +130,7 @@
                     @if (auth()->user()->role === 'user')
                     <li><a href="{{ url('/data-entry') }}">Data Entry</a></li>
                     @elseif (auth()->user()->role === 'admin')
+                    <li><a href="{{ url('/user-management') }}">User Management</a></li>
                     <li><a href="{{ url('/report') }}">Report</a></li>
                     @endif
                 </div>
