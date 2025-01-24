@@ -58,9 +58,8 @@
             <label for="edit-role" class="form-label">Role</label>
             <select class="form-select" id="edit-role">
               <option value="" disabled selected>Select a role</option>
-              <option value="Admin">Admin</option>
-              <option value="Editor">Editor</option>
-              <option value="Viewer">Viewer</option>
+              <option value="admin">Admin</option>
+              <option value="user">User</option>
             </select>
           </div>
           <div class="mb-3">
@@ -114,7 +113,7 @@ $(document).ready(function() {
                 orderable: false,
                 searchable: false,
                 render: function(data, type, row) {
-                    return `<button class="btn btn-danger" data-id="${row.id}">Delete</button>`;
+                    return `<button class="btn btn-danger btn-delete" data-id="${row.id}">Delete</button>`;
                 }
             }
         ],
@@ -130,17 +129,14 @@ $(document).ready(function() {
 
     $(document).on('click', '.btn-edit', function() {
         const userId = $(this).data('id');
-        console.log(userId);
+        $('#edit-user-modal').data('id', userId);
         $.ajax({
-            url: "{{route('get.data.activity.note')}}",
-            method: 'POST',
+            url: `{{ route('get-user-data-by-id', ['id' => ':id']) }}`.replace(':id', userId),
+            method: 'GET',
             success: function(user) {
-                // Populate modal fields with user data
-                $('#edit-name').val(user.name);
-                $('#edit-role').val(user.role);
-                $('#edit-password').val(''); // Leave password empty for security
-
-                // Open the modal (Bootstrap handles this automatically with data attributes)
+                $('#edit-name').val(user.data.name);
+                $('#edit-role').val(user.data.role).change()
+                $('#edit-password').val('');
                 $('#edit-user-modal').modal('show');
             },
             error: function() {
@@ -148,6 +144,109 @@ $(document).ready(function() {
             }
         });
     })
+
+    $('#save-changes-btn').click(function () {
+        const userId = $('#edit-user-modal').data('id');
+        const updatedName = $('#edit-name').val();
+        const updatedRole = $('#edit-role').val();
+        const updatedPassword = $('#edit-password').val();
+
+        $.ajax({
+            url: `{{ route('update-user-data', ['id' => ':id']) }}`.replace(':id', userId), // Replace :id with userId
+            method: 'PUT',
+            data: {
+                _token: "{{ csrf_token() }}",
+                name: updatedName,
+                role: updatedRole,
+                password: updatedPassword
+            },
+            success: function (response) {
+                $('#edit-user-modal').modal('hide');
+                if (response.success) {
+                    Swal.fire({
+                        title: response.message,
+                        icon: 'success',
+                        confirmButtonColor: '#6259ca',
+                        confirmButtonText: 'Ok'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: response.message,
+                        icon: 'error',
+                        confirmButtonColor: '#e74c3c',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            },
+            error: function (xhr) {
+                console.error('Error:', xhr.responseJSON);
+                alert('An error occurred while updating the user.');
+            }
+        });
+    });
+
+    $(document).on('click', '.btn-delete', function() {
+        const userId = $(this).data('id');
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to delete the User",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#6259ca',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `{{ route('delete-user', ['id' => ':id']) }}`.replace(':id', userId),
+                    type: 'DELETE',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: 'Success!',
+                                text: response.message,
+                                icon: 'success',
+                                confirmButtonColor: '#6259ca',
+                                confirmButtonText: 'Ok'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            });
+                        } else {
+                            $('#from-date').val('');
+                            $('#to-date').val('');
+                            Swal.fire({
+                                title: 'Error!',
+                                text: response.message,
+                                icon: 'error',
+                                confirmButtonColor: '#d33',
+                                confirmButtonText: 'Ok'
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred: ' + error,
+                            icon: 'error',
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'Ok'
+                        });
+                    }
+                });
+            }
+        });
+    })
+
 
 
 });

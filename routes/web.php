@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DataEntryController;
-use App\Http\Controllers\userManagement;
+use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -40,8 +40,11 @@ Route::middleware(['auth'])->prefix('data-entry')->group(function () {
 
 
 Route::middleware(['auth'])->prefix('user-management')->group(function () {
-    Route::get('/', [userManagement::class, 'index'])->name('user.management');
-    Route::get('/get-user-data', [userManagement::class, 'getUserData'])->name('user.management.data');
+    Route::get('/', [UserManagementController::class, 'index'])->name('user.management');
+    Route::get('/get-user-data', [UserManagementController::class, 'getUserData'])->name('user.management.data');
+    Route::get('/user/{id}', [UserManagementController::class, 'getUserDataById'])->name("get-user-data-by-id");
+    Route::put('/user/{id}', [UserManagementController::class, 'updateUserData'])->name('update-user-data');
+    Route::delete('/user/{id}', [UserManagementController::class, 'deleteUser'])->name('delete-user');
 });
 
 
