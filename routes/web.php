@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DataEntryController;
+use App\Http\Controllers\userManagement;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -34,6 +35,18 @@ Route::middleware(['auth'])->prefix('data-entry')->group(function () {
     Route::get('/', [DataEntryController::class, 'showForm'])->name('data.entry')->middleware('checkRole:user');
     Route::post('/', [DataEntryController::class, 'storeData'])->name('store.entry');
     Route::get('/data', [DataEntryController::class, 'getData'])->name('data-entry.data')->middleware('checkRole:admin');
+    // Route::get('/user-management', [userManagement::class, 'index'])->name('user.management')->middleware('checkRole:admin');
+});
+
+
+Route::middleware(['auth'])->prefix('user-management')->group(function () {
+    Route::get('/', [userManagement::class, 'index'])->name('user.management');
+    Route::get('/get-user-data', [userManagement::class, 'getUserData'])->name('user.management.data');
+});
+
+
+Route::post('/test', function () {
+   return "<h1>This is a test page</h1>";
 });
 
 Route::middleware(['auth', 'checkRole:admin'])->group(function () {
