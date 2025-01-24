@@ -23,7 +23,7 @@
     }
 </style>
 
-<div class="container">
+<div class="container-fluid">
     <h1>Tenant Summary</h1>
     <table id="data-table" class="display">
         <thead>
@@ -79,7 +79,7 @@ $(document).ready(function() {
             {
                 targets: '_all', // Apply to all columns
                 createdCell: function (td) {
-                    $(td).css('padding-left', '20px'); // Add 5px padding to all columns
+                    $(td).css('padding', '20px'); // Add 5px padding to all columns
                 }
             }
         ],
