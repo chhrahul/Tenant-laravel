@@ -22,6 +22,6 @@ class CheckUserRole
         }
 
         // Redirect to login or unauthorized page
-        return redirect()->route('login')->with('error', 'Unauthorized access.');
+        return back()->with('error', 'Unauthorized access.');
     }
 }

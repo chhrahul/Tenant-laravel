@@ -39,7 +39,7 @@ Route::middleware(['auth'])->prefix('data-entry')->group(function () {
 });
 
 
-Route::middleware(['auth'])->prefix('user-management')->group(function () {
+Route::middleware(['auth','checkRole:admin'])->prefix('user-management')->group(function () {
     Route::get('/', [UserManagementController::class, 'index'])->name('user.management');
     Route::get('/get-user-data', [UserManagementController::class, 'getUserData'])->name('user.management.data');
     Route::get('/user/{id}', [UserManagementController::class, 'getUserDataById'])->name("get-user-data-by-id");
