@@ -45,7 +45,7 @@ Route::middleware(['auth'])->prefix('user-management')->group(function () {
 });
 
 
-Route::post('/test', function () {
+Route::get('/test', function () {
    return "<h1>This is a test page</h1>";
 });
 
