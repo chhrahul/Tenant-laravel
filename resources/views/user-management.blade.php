@@ -21,6 +21,9 @@
     tfoot th {
         background-color: #f9f9f9;
     }
+    #data-table_filter{
+        margin-bottom: 10px;
+    }
 </style>
 
 <div class="container-fluid">

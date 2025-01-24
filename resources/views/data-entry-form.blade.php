@@ -28,6 +28,7 @@
         font-size: 14px;
         color: #555;
         margin-bottom: 5px;
+        text-transform: capitalize;
     }
 
     .form-input {
@@ -163,13 +164,13 @@
 
     <div class="form-group">
         <label for="square_feet">Square Feet (SF)</label>
-        <input type="number" name="square_feet" id="square_feet" class="form-input" min="1" step="1" required>
+        <input type="number" name="square_feet" id="square_feet" class="form-input" min="1" step="1">
     </div>
 
 
     <div class="form-group">
         <label for="percentage_of_total">% of Total </label>
-        <input type="number" name="percentage_of_total" id="percentage_of_total" class="form-input" step="0.01" >
+        <input type="number" name="percentage_of_total" id="percentage_of_total" class="form-input" step="0.01" min="0.1">
     </div>
 
     <div class="form-group">
