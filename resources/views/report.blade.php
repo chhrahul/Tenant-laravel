@@ -45,7 +45,7 @@
 </style>
 
 <div class="container-fluid">
-    <h1>Tenant Summary</h1>
+    <h1 style="text-align:center">Tenant Summary</h1>
     <table id="data-table" class="display">
         <thead>
             <tr>

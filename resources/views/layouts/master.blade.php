@@ -127,9 +127,8 @@
                 <div>
                     <!-- <li><a href="{{ url('auth/register') }}">Registration</a></li> -->
                     <!-- <li><a href="{{ url('auth/login') }}">Login</a></li> -->
-                    @if (auth()->user()->role === 'user')
-                    <li><a href="{{ url('/data-entry') }}">Data Entry</a></li>
-                    @elseif (auth()->user()->role === 'admin')
+
+                    @if (auth()->user()->role === 'admin')
                     <li><a href="{{ url('/user-management') }}">User Management</a></li>
                     <li><a href="{{ url('/report') }}">Report</a></li>
                     @endif

@@ -45,7 +45,7 @@
 </style>
 
 <div class="container-fluid">
-    <h1>User management</h1>
+    <h1 style="text-align:center">User management</h1>
     <table id="data-table" class="display">
         <thead>
             <tr>
