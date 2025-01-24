@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -34,11 +33,10 @@ class LoginController extends Controller
     protected function validateLogin(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'login' => 'required|string', // Single field for email or username
             'password' => 'required|string',
         ], [
-            'email.required' => 'The email field is required.',
-            'email.email' => 'Please enter a valid email address.',
+            'login.required' => 'The login field is required.',
             'password.required' => 'The password field is required.',
         ]);
     }
@@ -53,11 +51,13 @@ class LoginController extends Controller
     {
         $this->validateLogin($request);
 
-        if (Auth::attempt($request->only('email', 'password'))) {
+        $loginField = filter_var($request->input('login'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        if (Auth::attempt([$loginField => $request->input('login'), 'password' => $request->input('password')])) {
             return $this->authenticated($request, Auth::user());
         }
 
-        return redirect()->back()->withErrors(['email' => 'Invalid credentials'])->withInput();
+        return redirect()->back()->withErrors(['login' => 'Invalid credentials'])->withInput();
     }
 
     /**

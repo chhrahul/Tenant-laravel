@@ -80,8 +80,8 @@
     <h2>Login</h2>
 
     <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" name="email" id="email" class="form-input" value="{{ old('email') }}">
+        <label for="login">Email or Username</label>
+        <input type="text" name="login" id="login" class="form-input" value="{{ old('email') }}">
         @error('email')
             <div class="error" style="color:red; margin-top:5px">{{ $message }}</div>
         @enderror
@@ -116,13 +116,13 @@
                     $field.after(`<div class="error" style="color:red; margin-top:5px">${fieldName.replace("_", " ").replace(/^./, str => str.toUpperCase())} is required.</div>`);
                 }
 
-                if (fieldName === 'email' && fieldValue !== '') {
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailRegex.test(fieldValue)) {
-                        isValid = false;
-                        $field.after(`<div class="error" style="color:red; margin-top:5px">Please enter a valid email address.</div>`);
-                    }
-                }
+                // if (fieldName === 'email' && fieldValue !== '') {
+                //     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                //     if (!emailRegex.test(fieldValue)) {
+                //         isValid = false;
+                //         $field.after(`<div class="error" style="color:red; margin-top:5px">Please enter a valid email address.</div>`);
+                //     }
+                // }
             });
 
             if (!isValid) {

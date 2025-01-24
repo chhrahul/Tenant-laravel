@@ -154,7 +154,7 @@
 
     <div class="form-group">
         <label for="suit">Suit</label>
-        <input type="number" name="suit" id="suit" class="form-input" >
+        <input type="number" name="suit" id="suit" class="form-input" min="1">
     </div>
 
     <div class="form-group">
@@ -199,7 +199,8 @@
         }
         $('input').on('blur', function() {
             const value = $(this).val();
-            const name = $(this).attr('name').replace(/_/g, ' ');
+            const name = $(this).attr('name').replace(/_/g, ' ').replace(/^./, str => str.toUpperCase());
+            console.log(name);
             $(this).next('.error').remove();
 
             if (!value) {

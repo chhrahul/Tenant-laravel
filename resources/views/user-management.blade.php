@@ -24,6 +24,24 @@
     #data-table_filter{
         margin-bottom: 10px;
     }
+    .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
 </style>
 
 <div class="container-fluid">
@@ -86,6 +104,9 @@ $(document).ready(function() {
     $('#data-table').DataTable({
         processing: true,
         serverSide: true,
+        language: {
+            processing: '<div class="loader"></div>' // Add your custom loader HTML
+        },
         ajax: '{{ route('user.management.data') }}',
         columns: [
             {
@@ -97,7 +118,14 @@ $(document).ready(function() {
             },
             { data: 'name', name: 'townameer' },
             { data: 'email', name: 'email' },
-            { data: 'role', name: 'role' },
+            {
+                data: 'role',
+                name: 'role',
+                render: function(data, type, row) {
+                    // Capitalize the first letter
+                    return data.charAt(0).toUpperCase() + data.slice(1);
+                }
+            },
             {
                 data: 'created_at',
                 name: 'square_feet',

@@ -21,6 +21,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
+            'username' => 'required|string|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'role' => 'required|string|in:user,admin',
         ]);
@@ -50,9 +51,10 @@ class RegisterController extends Controller
      */
     protected function createUser(array $data)
     {
-        return User::create(attributes: [
+        return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'username' => $data['username'],
             'password' => Hash::make($data['password']),
             'role' => $data['role'],
         ]);
@@ -71,15 +73,17 @@ class RegisterController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
+
         $validated = $validator->validated();
 
         $user = $this->createUser($validated);
+
         auth()->login($user);
-        if($user->role == 'user'){
+
+        if ($user->role == 'user') {
             return redirect()->route('data.entry');
-        }else{
+        } else {
             return redirect()->route('showReport');
         }
     }
-
 }

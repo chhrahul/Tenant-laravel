@@ -24,6 +24,24 @@
     #data-table_filter{
         margin-bottom: 10px;
     }
+    .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
 </style>
 
 <div class="container-fluid">
@@ -34,7 +52,7 @@
                 <th>BUILDING NAME</th>
                 <th>TOWER</th>
                 <th>SUITE</th>
-                <th>IN PLACE RENT (NNN)</th>
+                <th>IN-PLACE RENT (NNN)</th>
                 <th>SQUARE FEET</th>
                 <th>% OF TOTAL</th>
                 <th>LEASE EXPIRATION </th>
@@ -58,6 +76,9 @@ $(document).ready(function() {
     $('#data-table').DataTable({
         processing: true,
         serverSide: true,
+        language: {
+            processing: '<div class="loader"></div>' // Add your custom loader HTML
+        },
         ajax: '{{ route('data-entry.data') }}', // The route that returns data
         columns: [
             { data: 'building_name', name: 'building_name' },
