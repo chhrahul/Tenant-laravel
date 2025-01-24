@@ -41,7 +41,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="edit-user-modal" tabindex="-1" aria-labelledby="exampleModalLabel" >
+<div class="modal fade" id="edit-user-modal" tabindex="-1" aria-labelledby="exampleModalLabel">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -83,9 +83,15 @@ $(document).ready(function() {
     $('#data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{{ route('user.management.data') }}', // The route that returns data
+        ajax: '{{ route('user.management.data') }}',
         columns: [
-            { data: 'id', name: 'id' },
+            {
+                data: 'id',
+                name: 'id',
+                render: function(data, type, row, meta) {
+                    return meta.row + 1;
+                }
+            },
             { data: 'name', name: 'townameer' },
             { data: 'email', name: 'email' },
             { data: 'role', name: 'role' },
