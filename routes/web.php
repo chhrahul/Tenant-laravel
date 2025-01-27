@@ -34,7 +34,9 @@ Route::prefix('auth')->group(function () {
 Route::middleware(['auth'])->prefix('data-entry')->group(function () {
     Route::get('/', [DataEntryController::class, 'showForm'])->name('data.entry')->middleware('checkRole:user');
     Route::post('/', [DataEntryController::class, 'storeData'])->name('store.entry');
-    Route::get('/data', [DataEntryController::class, 'getData'])->name('data-entry.data')->middleware('checkRole:admin');
+    Route::get('/data', [DataEntryController::class, 'getData'])->name('data-entry.data');
+    Route::get('/data-by-id/{id}', [DataEntryController::class, 'getDataById'])->name('data.by.id');
+    Route::put('/update-data-change/{id}', [DataEntryController::class, 'updateDataChanges'])->name('update-data-changes');
     // Route::get('/user-management', [userManagement::class, 'index'])->name('user.management')->middleware('checkRole:admin');
 });
 
@@ -52,7 +54,7 @@ Route::get('/test', function () {
    return "<h1>This is a test page</h1>";
 });
 
-Route::middleware(['auth', 'checkRole:admin'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('report', [DataEntryController::class, 'showReport'])->name('showReport');
 });
 

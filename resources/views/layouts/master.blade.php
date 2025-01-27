@@ -128,10 +128,12 @@
                     <!-- <li><a href="{{ url('auth/register') }}">Registration</a></li> -->
                     <!-- <li><a href="{{ url('auth/login') }}">Login</a></li> -->
 
-                    @if (auth()->user()->role === 'admin')
-                    <li><a href="{{ url('/user-management') }}">User Management</a></li>
-                    <li><a href="{{ url('/report') }}">Report</a></li>
+                    @if (auth()->user()->role === 'user')
+                        <li><a href="{{ url('/data-entry') }}">Tenant Information</a></li>
+                    @elseif (auth()->user()->role === 'admin')
+                        <li><a href="{{ url('/user-management') }}">User Management</a></li>
                     @endif
+                        <li><a href="{{ url('/report') }}">Report</a></li>
                 </div>
                 <div>
                     <li>

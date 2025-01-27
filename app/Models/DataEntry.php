@@ -31,6 +31,7 @@ class DataEntry extends Model
         'square_feet',
         'percentage_of_total',
         'lease_expiration',
+        'user_id',
     ];
 
     /**
