@@ -257,7 +257,26 @@ $(document).ready(function() {
     $('#save-data-changes').click(function(e) {
         e.preventDefault(); // Prevent default form submission
 
+        let isValid = true;
+
         var formData = $('#edit-data-form').serialize(); // Serialize form data
+        var formDataArray = $('#edit-data-form').serializeArray();
+
+        $.each(formDataArray, function(index, FieldData) {
+            let fieldName = FieldData.name;
+            let fieldValue = FieldData.value;
+            let $field = $('#edit-' + fieldName);
+
+            $field.next('.error').remove();
+            if (fieldValue === '') {
+                isValid = false;
+                $field.after(`<div class="error" style="color:red; margin-top:5px">${fieldName.replace(/_/g, ' ').replace(/^./, str => str.toUpperCase())} is required.</div>`);
+            }
+        });
+        if (!isValid) {
+            return;
+        }
+
         const dataId = $('#edit-data-modal').data('id');
 
         $.ajax({

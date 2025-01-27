@@ -109,12 +109,10 @@
     $(document).ready(function() {
 
         $('#lease_expiration').click(function() {
-            // Trigger the click event on the input field
             $(this)[0].showPicker();
         });
 
         const today = new Date().toISOString().split('T')[0];
-        // Set the 'min' attribute of the lease_expiration input field to today's date
         $('#lease_expiration').attr('min', today);
 
         if ($('.alert-success').length) {
