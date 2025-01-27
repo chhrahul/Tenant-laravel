@@ -145,6 +145,14 @@
 
 <script>
 $(document).ready(function() {
+
+    $('#edit-lease_expiration').click(function() {
+            $(this)[0].showPicker();
+        });
+
+    const today = new Date().toISOString().split('T')[0];
+    $('#edit-lease_expiration').attr('min', today);
+
     $('#data-table').DataTable({
         processing: true,
         serverSide: true,
