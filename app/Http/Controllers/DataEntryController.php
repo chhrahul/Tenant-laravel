@@ -98,11 +98,14 @@ class DataEntryController extends Controller
             function ($query) {
                 $query->where('user_id', auth()->id());
             }
-        )->get()
-          ->map(function (DataEntry $lease) {
-              $lease->lease_expiration = Carbon::parse($lease->lease_expiration)->format('Y-m-d');
-              return $lease;
-          });
+        )
+        ->orderBy('created_at', 'desc')  // Order by lease_expiration date in descending order
+        ->get()
+        ->map(function (DataEntry $lease) {
+            $lease->lease_expiration = Carbon::parse($lease->lease_expiration)->format('Y-m-d');
+            return $lease;
+        });
+
         return DataTables::of($data)->make(mDataSupport: true);
     }
 
