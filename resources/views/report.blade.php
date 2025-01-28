@@ -227,6 +227,7 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '.btn-data-edit', function() {
+        $('.error').remove();
         const dataId = $(this).data('id');
         console.log(dataId);
         $('#edit-data-modal').data('id', dataId);
