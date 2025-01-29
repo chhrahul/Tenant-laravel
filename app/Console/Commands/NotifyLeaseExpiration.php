@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 use App\Models\DataEntry;
 use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 
 use Illuminate\Console\Command;
@@ -37,7 +38,13 @@ class NotifyLeaseExpiration extends Command
             return;
         }
 
-        $emails = ['sanjit.softweaver@gmail.com'];
+        $emails = User::where('role', 'admin')->pluck('email')->toArray();
+
+        if (empty($emails)) {
+            $this->info('No admins found for notification.');
+            \Log::info('No admins found for notification.');
+            return;
+        }
 
         $emailContent = "The following leases are expiring:\n\n";
         foreach ($leases as $lease) {
